@@ -73,6 +73,7 @@ module "kube-vpc" {
     public_subnets  = var.vpc_public_subnets
 
     enable_ipv6 = true
+    enable_nat_gateway = true
     single_nat_gateway = true
 
     public_subnet_tags = {
@@ -149,6 +150,7 @@ resource "aws_security_group_rule" "control_plane_rule" {
 resource "aws_security_group" "outbound" {
     name = "outbound_to_igw"
     description = "outbound to all"
+    vpc_id = module.kube-vpc.vpc_id
     egress {
         cidr_blocks = [ "0.0.0.0/0" ]
         description = "Out bound"
@@ -163,6 +165,7 @@ resource "aws_security_group" "outbound" {
 resource "aws_security_group" "kube_worker_nodes" {
     name = "kube_worker_nodes_sg"
     description = "Allow access to worker nodes"
+    vpc_id = module.kube-vpc.vpc_id
 }
 
 resource "aws_security_group_rule" "worker_node_sg_1" {
