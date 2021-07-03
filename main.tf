@@ -94,6 +94,10 @@ module "kube-vpc" {
     }
 }
 
+locals {
+  nat_ips = [for ip in module.kube-vpc.nat_public_ips: "${ip}/32"]
+}
+
 resource "random_shuffle" "private_subnet" {
     input = module.kube-vpc.private_subnets
     result_count = 1
@@ -138,7 +142,7 @@ resource "aws_security_group_rule" "control_plane_rules" {
 }
 
 resource "aws_security_group_rule" "control_plane_rule" {
-    cidr_blocks = concat(module.kube-vpc.nat_public_ips,[ "${chomp(data.http.myip.body)}/32", var.vpc_cidr_range ])
+    cidr_blocks = concat(local.nat_ips,[ "${chomp(data.http.myip.body)}/32", var.vpc_cidr_range ])
     type = "ingress"
     description = "All in bound kube API server"
     from_port = 6443
@@ -200,6 +204,9 @@ resource "aws_security_group_rule" "worker_node_sg_3" {
 }
 
 resource "aws_instance" "master" {
+    depends_on = [
+      module.kube-vpc
+    ]
     ami = data.aws_ami.ubuntu.id
     key_name = var.key_name
     subnet_id = random_shuffle.public_subnet.result[0]
@@ -213,6 +220,9 @@ resource "aws_instance" "master" {
 }
 
 resource "aws_instance" "worker" {
+    depends_on = [
+      module.kube-vpc
+    ]
     count = var.worker-count
     ami = data.aws_ami.ubuntu.id
     subnet_id = random_shuffle.private_subnet.result[0]
