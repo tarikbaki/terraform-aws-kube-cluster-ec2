@@ -142,7 +142,7 @@ resource "aws_security_group_rule" "control_plane_rules" {
 }
 
 resource "aws_security_group_rule" "control_plane_rule" {
-    cidr_blocks = concat(local.nat_ips,[ "${chomp(data.http.myip.body)}/32", var.vpc_cidr_range ])
+    cidr_blocks = concat(local.nat_ips,[ "${chomp(data.http.myip.body)}/32", var.vpc_cidr_range, "${aws_instance.master.public_ip}/32" ])
     type = "ingress"
     description = "All in bound kube API server"
     from_port = 6443
