@@ -223,12 +223,13 @@ resource "aws_instance" "worker" {
   depends_on = [
     module.kube-vpc
   ]
-  count                  = var.worker-count
-  ami                    = data.aws_ami.ubuntu.id
-  subnet_id              = random_shuffle.private_subnet.result[0]
-  key_name               = var.key_name
-  instance_type          = "t2.micro"
-  vpc_security_group_ids = [aws_security_group.ssh_sg.id, aws_security_group.kube_worker_nodes.id, aws_security_group.outbound.id]
+  count                       = var.worker-count
+  ami                         = data.aws_ami.ubuntu.id
+  subnet_id                   = random_shuffle.private_subnet.result[0]
+  associate_public_ip_address = true
+  key_name                    = var.key_name
+  instance_type               = "t2.micro"
+  vpc_security_group_ids      = [aws_security_group.ssh_sg.id, aws_security_group.kube_worker_nodes.id, aws_security_group.outbound.id]
   tags = {
     Name        = "kube-worker-${count.index}",
     Application = "kube-cluster"
