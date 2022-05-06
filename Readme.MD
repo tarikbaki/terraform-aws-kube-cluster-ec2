@@ -26,7 +26,7 @@
   - Only the user/system from which the `terraform apply` is run, can connect to the instances created. 
 
 
-![alt text](https://github.com/graykode/aws-kubeadm-terraform/blob/master/aws.png)
+![design diagram](https://github.com/graykode/aws-kubeadm-terraform/blob/master/aws.png)
 
 ### NOTE
 
@@ -61,7 +61,7 @@
 *If automating, pass `--auto-approve` flag to apply and destroy commands*
 
 ### Optional
-
+NO optional yet.
 
 
 ****
