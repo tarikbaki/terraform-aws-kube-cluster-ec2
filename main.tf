@@ -211,7 +211,7 @@ resource "aws_instance" "master" {
     key_name = var.key_name
     subnet_id = random_shuffle.public_subnet.result[0]
     associate_public_ip_address = true
-    instance_type = "t2.medium"
+    instance_type = "t2.micro"
     vpc_security_group_ids  = [ aws_security_group.ssh_sg.id, aws_security_group.kube_control_plane.id, aws_security_group.outbound.id ]
     tags = {
         Name = "kube-master",

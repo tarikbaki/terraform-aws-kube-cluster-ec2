@@ -1,7 +1,7 @@
 # Terraform Kube Cluster EC2
 
 > Terraform code to create a kube cluster using ec2.
-> To be used with kubeadm or kubespray
+> To be used with kubeadm 
 
 
 ## Prerequisites
@@ -15,7 +15,7 @@
   - Single NAT GW
 
 - 1 Master Node
-  - t3.medium
+  - t2.micro
 
 - 1 Worker node - Can be configured using `worker-count` key in `variables.tf`
   - t2.micro  
@@ -70,3 +70,22 @@
         region  = <region>
     }
 ```
+
+
+****
+Helm install
+ubuntu@ip-10-0-103-105:~$ ./get_helm.sh 
+Downloading https://get.helm.sh/helm-v2.17.0-linux-amd64.tar.gz
+Preparing to install helm and tiller into /usr/local/bin
+helm installed into /usr/local/bin/helm
+tiller installed into /usr/local/bin/tiller
+Run 'helm init' to configure helm.
+
+
+ubuntu@ip-10-0-103-105:~$ wget https://git.io/get_helm.sh
+
+get_helm.sh         100%[===================>]   6.51K  --.-KB/s    in 0s      
+
+ubuntu@ip-10-0-103-105:~$ chmod 700 get_helm.sh 
+ubuntu@ip-10-0-103-105:~$ ./get_helm.sh
+
