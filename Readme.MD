@@ -125,3 +125,104 @@ Removing files that are not necessary.
 ```
     helm version
 ```
+
+# Docker File
+Step 1Setting Up the Flask Application
+
+ 
+```sudo mkdir /var/www/TestApp
+cd /var/www/TestApp
+sudo mkdir -p app/static app/templates
+ 
+sudo nano app/__init__.py
+``` 
+ 
+ 
+/var/www/TestApp/app/__init__.py
+```from flask import Flask
+app = Flask(__name__)
+from app import views
+``` 
+
+``` sudo nano app/views.py
+ ```
+ 
+ 
+/var/www/TestApp/app/views.py
+```from app import app
+ 
+@app.route('/')
+def home():
+   return "hello world!"
+ ```
+ ```
+sudo nano uwsgi.ini
+ ```
+
+
+/var/www/TestApp/uwsgi.ini
+```
+[uwsgi]
+module = main
+callable = app
+master = true
+ ```
+ 
+ ```
+sudo nano main.py
+ ```
+
+/var/www/TestApp/main.py
+```
+from app import app
+sudo nano requirements.txt
+ ```
+
+/var/www/TestApp/requirements.txt
+
+```
+Flask>=2.0.2
+``` 
+ 
+#Step 2 — Setting Up Docker
+
+ 
+ ```
+sudo nano Dockerfile
+ ```
+
+
+/var/www/TestApp/Dockerfile
+```
+FROM tiangolo/uwsgi-nginx-flask:python3.8-alpine
+RUN apk --update add bash nano
+ENV STATIC_URL /static
+ENV STATIC_PATH /var/www/app/static
+COPY ./requirements.txt /var/www/requirements.txt
+RUN pip install -r /var/www/requirements.txt
+ ```
+ 
+To check if a port is free, :
+```
+sudo nc localhost 56733 < /dev/null; echo $?
+ ```
+ ```
+sudo nano start.sh
+ ```
+ 
+/var/www/TestApp/start.sh
+```
+#!/bin/bash
+app="docker.test"
+docker build -t ${app} .
+docker run -d -p 56733:80 \
+  --name=${app} \
+  -v $PWD:/app ${app}
+``` 
+ 
+ ```
+sudo bash start.sh
+ 
+sudo docker ps
+
+```
