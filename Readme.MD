@@ -1,5 +1,73 @@
 # Terraform Kube Cluster EC2
 
+## Deploy the infrastructure
+
+1. Deploy the infrastructure using Terraform
+
+    ```bash
+    terraform init
+
+    terraform plan
+
+    terraform apply
+    ```
+
+2. Destroy infrastructure
+
+    ```bash
+    terraform destroy
+    ```
+
+<br/>
+
+## Prepare the requirements of the python app
+
+1. Prepare the requirements and run the app using the `docker-compose` on the local ;
+    ``` bash
+    cd app
+
+    pip install pipreqs
+
+    pipreqs .
+
+    docker-compose up
+    ```
+
+2. Go to the browser and open the `http://localhost:3000/`
+
+3. Destroy the docker containers;
+    ``` bash
+    docker-compose down
+    ```
+
+<br/>
+
+## Build the app and push docker image into the ECR
+
+``` bash
+cd app
+
+aws ecr get-login-password \
+    --region eu-central-1 \
+    --profile myAccount \
+    | docker login \
+        --username AWS \
+        --password-stdin 927869708525.dkr.ecr.eu-central-1.amazonaws.com
+
+docker build -t 927869708525.dkr.ecr.eu-central-1.amazonaws.com/demo:0.1 .
+
+docker push 927869708525.dkr.ecr.eu-central-1.amazonaws.com/demo:0.1
+```
+
+
+
+
+
+
+#####
+
+
+
 > Terraform code to create a kube cluster using ec2.
 > To be used with kubeadm 
 
