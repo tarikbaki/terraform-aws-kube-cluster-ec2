@@ -1,7 +1,7 @@
 from http import client
 import os
 import flask
-import mysql-client
+import MySQLdb
 
 application = flask.Flask(__name__)
 application.debug = True
