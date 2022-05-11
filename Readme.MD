@@ -28,7 +28,7 @@
 
     pip install pipreqs
 
-    pipreqs .
+    pipreqs . #
 
     docker-compose up
     ```
