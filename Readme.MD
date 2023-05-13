@@ -1,5 +1,16 @@
 # Terraform Kube Cluster EC2
 
+In this repository, you can create kubernetes cluster using only terraform apply in AWS.
+
+
+
+1. Configure on your docker
+$ docker run -it graykode/aws-kubeadm-terraform:0.3 /bin/bash
+Export your own AWS Access / Secret keys
+
+$ export AWS_ACCESS_KEY_ID=<Your Access Key in AWS>
+$ export AWS_SECRET_ACCESS_KEY=<Your Access Key in Secret>
+
 ## Deploy the infrastructure
 
 1. Deploy the infrastructure using Terraform
@@ -127,7 +138,6 @@ docker push 927869708525.dkr.ecr.eu-central-1.amazonaws.com/demo:0.1
 *If automating, pass `--auto-approve` flag to apply and destroy commands*
 
 ### Optional
-
 
 
 ****
